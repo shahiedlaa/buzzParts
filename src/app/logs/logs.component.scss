@@ -1,0 +1,31 @@
+mat-card-header {
+  margin-bottom: 0.5rem;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.mat-title {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.mat-column-date {
+  min-width: 122px;
+}
+
+.mat-column-action {
+  min-width: 80px;
+}
+
+td {
+  mat-icon {
+    cursor: pointer;
+  }
+}

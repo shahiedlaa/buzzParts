@@ -1,0 +1,24 @@
+//small screen size
+
+.create-logs-container {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+mat-form-field {
+  width: 145px;
+
+  mat-label {
+    font-size: small;
+  }
+}
+
+mat-card-actions {
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.form-button {
+  color: black !important;
+  border: 1px solid black;
+}

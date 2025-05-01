@@ -1,0 +1,83 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Create Log</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="createLogForm" class="create-logs-container">
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" placeholder="S123..." />
+          <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Meeting date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="datepicker"
+            [(ngModel)]="dateTime"
+            [ngModelOptions]="{ updateOn: 'blur', standalone: true }"
+          />
+          <mat-datepicker #datepicker />
+          <mat-datepicker-toggle [for]="datepicker" matSuffix />
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Meeting time</mat-label>
+          <input
+            matInput
+            [matTimepicker]="timepicker"
+            [(ngModel)]="dateTime"
+            [ngModelOptions]="{ updateOn: 'blur', standalone: true }"
+          />
+          <mat-timepicker #timepicker />
+          <mat-timepicker-toggle [for]="timepicker" matSuffix />
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Bus Id</mat-label>
+          <input matInput formControlName="busId" placeholder="S123..." />
+          <mat-icon matSuffix>tag</mat-icon>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Part Name</mat-label>
+          <mat-select formControlName="partName">
+            @for (item of partName; track item) {
+            <mat-option [value]="item">{{ item }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Part Return</mat-label>
+          <input matInput formControlName="partReturn" placeholder="S123..." />
+          <mat-icon matSuffix>tag</mat-icon>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="outline">
+          <mat-label>Part Issue</mat-label>
+          <input matInput formControlName="partIssue" placeholder="S123..." />
+          <mat-icon matSuffix>tag</mat-icon>
+        </mat-form-field>
+      </p>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button
+      (click)="onSubmit()"
+      [disabled]="!createLogForm.valid"
+      mat-raised-button
+      class="form-button"
+    >
+      Create
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,13 @@
+<div *ngIf="(auth.isAuthenticated$ | async) === false; else loaded">
+  <mat-card style="padding: 1rem">
+    <mat-card-title>Welcome to buzz parts!</mat-card-title>
+    <mat-card-subtitle>Please login to continue...</mat-card-subtitle>
+  </mat-card>
+</div>
+
+<ng-template #loaded>
+  <mat-card style="padding: 1rem">
+    <mat-card-title>Nothing here...</mat-card-title>
+    <mat-card-subtitle>Please browse...</mat-card-subtitle>
+  </mat-card>
+</ng-template>

@@ -1,0 +1,54 @@
+<mat-toolbar>
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with menu icon"
+    routerLink="/"
+  >
+    <mat-icon>home</mat-icon>
+  </button>
+  <span>BuzzParts</span>
+  <span class="example-spacer"></span>
+  <div *ngIf="auth.isAuthenticated$ | async">
+    <button
+      mat-icon-button
+      matTooltip="Logs"
+      class="example-icon book-icon"
+      aria-label="Example icon-button with book icon"
+      routerLink="/logs"
+    >
+      <mat-icon>menu_book</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      matTooltip="Add Log"
+      class="example-icon"
+      aria-label="Example icon-button with add icon"
+      routerLink="/create-logs"
+    >
+      <mat-icon>add_box</mat-icon>
+    </button>
+  </div>
+  <button
+    *ngIf="(auth.isAuthenticated$ | async) === false; else logOut"
+    mat-icon-button
+    matTooltip="Login"
+    class="example-icon"
+    aria-label="Example icon-button with login icon"
+    (click)="login()"
+  >
+    <mat-icon>login</mat-icon>
+  </button>
+
+  <ng-template #logOut>
+    <button
+      mat-icon-button
+      matTooltip="Logout"
+      class="example-icon"
+      aria-label="Example icon-button with logout icon"
+      (click)="logout()"
+    >
+      <mat-icon>logout</mat-icon>
+    </button>
+  </ng-template>
+</mat-toolbar>

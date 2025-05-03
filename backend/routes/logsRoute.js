@@ -5,7 +5,7 @@ const upload = multer();
 
 const logsController = require("../controllers/logs");
 
-router.get("/", logsController.getLogs);
+router.get("/", upload.none(), logsController.getLogs);
 
 router.post("/", upload.none(), logsController.postLog);
 

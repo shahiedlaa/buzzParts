@@ -3,6 +3,7 @@ import { LogsComponent } from './logs/logs.component';
 import { CreateLogsComponent } from './logs/create-logs/create-logs.component';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { HomeComponent } from './home/home.component';
+import { logResolver } from './shared/resolvers/log.resolver';
 
 export const routes: Routes = [
   {
@@ -21,8 +22,11 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'create-logs/:serialNo',
+    path: 'create-logs/:busId',
     component: CreateLogsComponent,
     canActivate: [AuthGuard],
+    resolve: {
+      data: logResolver,
+    },
   },
 ];

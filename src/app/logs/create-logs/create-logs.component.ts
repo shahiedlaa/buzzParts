@@ -11,6 +11,7 @@ import {
 import { MaterialModule } from '../../shared/materials/material.module';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { LogsService } from '../../shared/services/logs-service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-create-logs',
@@ -21,24 +22,45 @@ import { LogsService } from '../../shared/services/logs-service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateLogsComponent {
-  constructor(private logsService: LogsService) {}
+  constructor(
+    private logsService: LogsService,
+    private route: ActivatedRoute
+  ) {}
 
   public createLogForm!: FormGroup;
   public dateTime!: Date;
-  public partName = ['OBC', 'DDU'];
+  public partName: string[] = ['OBC', 'DDU'];
+  public editMode: boolean = false;
+  private formData: any = {};
 
   ngOnInit() {
     this.initForm();
+    this.route.paramMap.subscribe((response) => {
+      response.has('busId') ? (this.editMode = true) : null;
+      this.formData = this.route.snapshot.data['data']['body'];
+      this.initForm(this.formData);
+    });
   }
 
-  initForm() {
+  initForm(formData?: any) {
+    this.dateTime = new Date(formData?.date);
     this.createLogForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
+      name: new FormControl(formData ? formData.name : '', [
+        Validators.required,
+      ]),
       date: new FormControl(''),
-      busId: new FormControl('', [Validators.required]),
-      partName: new FormControl('', [Validators.required]),
-      partIssue: new FormControl('', [Validators.required]),
-      partReturn: new FormControl('', [Validators.required]),
+      busId: new FormControl(formData ? formData.busId : '', [
+        Validators.required,
+      ]),
+      partName: new FormControl(formData ? formData.partName : '', [
+        Validators.required,
+      ]),
+      partIssue: new FormControl(formData ? formData.partIssue : '', [
+        Validators.required,
+      ]),
+      partReturn: new FormControl(formData ? formData.partIssue : '', [
+        Validators.required,
+      ]),
     });
   }
 

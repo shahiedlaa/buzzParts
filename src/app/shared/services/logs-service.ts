@@ -17,6 +17,15 @@ export class LogsService {
     return this.http.get<any>(this.url);
   }
 
+  getLogsByBusIdFromService(busId: any) {
+    let params = new HttpParams({
+      fromObject: {
+        busId: busId,
+      },
+    });
+    return this.http.get<any>(this.url, { params });
+  }
+
   addLogs(data: any) {
     const logData = new FormData();
 
@@ -41,12 +50,12 @@ export class LogsService {
   }
 
   deleteLog(busId: any) {
-    let body = new HttpParams({
+    let params = new HttpParams({
       fromObject: {
         busId: busId,
       },
     });
-    return this.http.delete<any>(this.url, { body });
+    return this.http.delete<any>(this.url, { params });
   }
 
   openSnackbar(message?: string, creationLog: boolean = false) {

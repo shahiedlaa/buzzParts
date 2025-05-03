@@ -1,7 +1,13 @@
 const Logs = require("../models/logs");
 
 exports.getLogs = async (req, res) => {
-  const logs = await Logs.find().select({ __v: 0, _id: 0 });
+  let logs;
+  const { busId } = req.query;
+
+  if (busId) {
+    logs = await Logs.findOne({ busId: busId }).select({ __v: 0, _id: 0 });
+  } else logs = await Logs.find().select({ __v: 0, _id: 0 });
+
   res.status(200).json({ body: logs });
 };
 

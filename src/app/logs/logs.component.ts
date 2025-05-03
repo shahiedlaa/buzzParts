@@ -45,7 +45,7 @@ export class LogsComponent {
         }
       },
       error: (error) => {
-        this.logsService.openSnackbar(error);
+        this.logsService.openSnackbar(error.message);
       },
     });
   }

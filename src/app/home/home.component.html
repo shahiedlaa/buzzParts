@@ -6,8 +6,8 @@
 </div>
 
 <ng-template #loaded>
-  <mat-card style="padding: 1rem">
-    <mat-card-title>Nothing here...</mat-card-title>
-    <mat-card-subtitle>Please browse...</mat-card-subtitle>
+  <mat-card *ngIf="auth.user$ | async as user" style="padding: 1rem">
+    <mat-card-title>Logged in as: {{ user.nickname }}</mat-card-title>
+    <mat-card-subtitle>Mail: {{ user.email }}</mat-card-subtitle>
   </mat-card>
 </ng-template>

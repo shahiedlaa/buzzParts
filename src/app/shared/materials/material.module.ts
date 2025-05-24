@@ -11,6 +11,7 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgModule } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   exports: [
@@ -27,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatTimepickerModule,
     MatDatepickerModule,
     MatSelectModule,
+    MatPaginatorModule,
   ],
 })
 export class MaterialModule {}

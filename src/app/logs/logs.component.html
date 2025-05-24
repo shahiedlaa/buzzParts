@@ -10,6 +10,7 @@
       </mat-form-field>
     </mat-card-header>
     <mat-card-content>
+      @if(loaded()){
       <div class="table-container">
         <table mat-table [dataSource]="logsDataSource" class="mat-elevation-z8">
           <ng-container matColumnDef="name">
@@ -69,11 +70,28 @@
               style="text-align: center; padding: 1rem"
               colspan="999"
             >
-              No record found
+              <div class="spinner-div">
+                <mat-progress-spinner
+                  mode="indeterminate"
+                ></mat-progress-spinner>
+              </div>
             </td>
           </tr>
         </table>
+        <mat-paginator
+          [pageSizeOptions]="[10]"
+          length="15"
+          [pageIndex]="index"
+          (page)="pageChange($event)"
+          showFirstLastButtons
+        >
+        </mat-paginator>
       </div>
+      } @if(logsData.isLoading()){
+      <div class="spinner-div">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </div>
+      }
     </mat-card-content>
   </mat-card>
 </div>

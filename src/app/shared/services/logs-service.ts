@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, resource, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
@@ -7,14 +7,35 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class LogsService {
-  readonly url = 'http://localhost:3000/api/logs';
+  readonly url: any = 'http://localhost:3000/api/logs';
   public errorMessage!: string;
   private _snackBar = inject(MatSnackBar);
+  private paginate = {
+    pageIndex: 0,
+    pageSize: 10,
+  };
+
+  readonly page = signal(0);
+  readonly pageSize = signal(10);
+
+  readonly pageConfig = computed(() => ({
+    page: this.page(),
+    pageSize: this.pageSize(),
+  }));
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getLogsFromService() {
-    return this.http.get<any>(this.url);
+  logsResource = resource({
+    request: () => this.pageConfig(),
+    loader: (params) =>
+      fetch(
+        `${this.url}?index=${params.request.page}&size=${params.request.pageSize}`
+      ).then((res) => res.json()),
+  });
+
+  getLogs(pageParams: any) {
+    this.page.set(pageParams.index);
+    return this.logsResource;
   }
 
   getLogsByBusIdFromService(busId: any) {
@@ -59,6 +80,8 @@ export class LogsService {
   }
 
   openSnackbar(message?: string, creationLog: boolean = false) {
-    this._snackBar.open(message ? message : this.errorMessage, 'Dismiss');
+    this._snackBar.open(message ? message : this.errorMessage, 'Dismiss', {
+      duration: 3000,
+    });
   }
 }

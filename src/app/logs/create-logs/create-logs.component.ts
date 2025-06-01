@@ -37,7 +37,7 @@ export class CreateLogsComponent {
     this.initForm();
     this.route.paramMap.subscribe((response) => {
       response.has('busId') ? (this.editMode = true) : null;
-      this.formData = this.route.snapshot.data['data'];
+      this.formData = this.route.snapshot.data['data'].body;
       this.initForm(this.formData);
     });
   }

@@ -30,6 +30,14 @@ export class LogsComponent {
   public index: number = 0;
   public length!: number;
 
+  public search: string = '';
+
+  public paginate = {
+    index: 0,
+    size: 10,
+    search: this.search || '',
+  };
+
   public loaded = computed(
     () => this.logsData.value() || this.logsData.reload()
   );
@@ -46,10 +54,7 @@ export class LogsComponent {
 
   ngOnInit() {
     this.logsDataSource = new MatTableDataSource();
-    this.getLogsFromService({
-      index: 0,
-      size: 10,
-    });
+    this.getLogsFromService(this.paginate);
   }
 
   getLogsFromService(pageParams?: any) {
@@ -64,7 +69,7 @@ export class LogsComponent {
   }
 
   editLog(event: any) {
-    this.router.navigate([`/create-logs/${event.busId}`]);
+    this.router.navigate([`/edit-logs/${event.busId}`]);
   }
 
   deleteLog(event: any) {
@@ -82,10 +87,16 @@ export class LogsComponent {
     });
   }
 
+  onClickSearch() {
+    this.paginate.search = this.search;
+    this.getLogsFromService(this.paginate);
+  }
+
   pageChange(event: PageEvent) {
     let pageParams = {
       index: event.pageIndex,
       size: event.pageSize,
+      search: this.search.trim() || '',
     };
     this.index = event.pageIndex;
     this.getLogsFromService(pageParams);

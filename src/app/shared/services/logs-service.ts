@@ -1,7 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, resource, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -10,41 +9,40 @@ export class LogsService {
   readonly url: any = 'http://localhost:3000/api/logs';
   public errorMessage!: string;
   private _snackBar = inject(MatSnackBar);
-  private paginate = {
-    pageIndex: 0,
-    pageSize: 10,
-  };
 
   readonly page = signal(0);
   readonly pageSize = signal(10);
+  readonly search = signal('');
 
   readonly pageConfig = computed(() => ({
     page: this.page(),
     pageSize: this.pageSize(),
+    search: this.search(),
   }));
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
   logsResource = resource({
     request: () => this.pageConfig(),
     loader: (params) =>
       fetch(
-        `${this.url}?index=${params.request.page}&size=${params.request.pageSize}`
+        `${this.url}?index=${params.request.page}&size=${params.request.pageSize}&search=${params.request.search}`
       ).then((res) => res.json()),
   });
 
   getLogs(pageParams: any) {
     this.page.set(pageParams.index);
+    this.search.set(pageParams.search);
     return this.logsResource;
   }
 
   getLogsByBusIdFromService(busId: any) {
-    let params = new HttpParams({
-      fromObject: {
-        busId: busId,
-      },
-    });
-    return this.http.get<any>(this.url, { params });
+    // let params = new HttpParams({
+    //   fromObject: {
+    //     busId: busId,
+    //   },
+    // });
+    return this.http.get<any>(this.url + '/edit-logs/' + busId);
   }
 
   addLogs(data: any) {

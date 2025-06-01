@@ -22,7 +22,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'create-logs/:busId',
+    path: 'edit-logs/:busId',
     component: CreateLogsComponent,
     canActivate: [AuthGuard],
     resolve: {

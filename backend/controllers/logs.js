@@ -1,24 +1,41 @@
 const Logs = require("../models/logs");
 
 exports.getLogs = async (req, res) => {
-  let { index, size } = req.query;
+  let { index, size, search } = req.query;
+  let articles;
 
   try {
     // If "page" and "pageSize" are not sent we will default them to 1 and 50.
     page = parseInt(index, 10) || 0;
     pageSize = parseInt(size, 10) || 10;
 
-    const articles = await Logs.aggregate([
-      {
-        $sort: { date: -1 },
-      },
-      {
-        $facet: {
-          metadata: [{ $count: "totalCount" }],
-          data: [{ $skip: page * pageSize }, { $limit: pageSize }],
+    if (search.length > 0) {
+      articles = await Logs.aggregate([
+        { $match: { $text: { $search: `${search}` } } },
+        {
+          $sort: { date: -1 },
         },
-      },
-    ]);
+        {
+          $facet: {
+            metadata: [{ $count: "totalCount" }],
+            data: [{ $skip: page * pageSize }, { $limit: pageSize }],
+          },
+        },
+      ]);
+    } else {
+      articles = await Logs.aggregate([
+        { $match: {} },
+        {
+          $sort: { date: -1 },
+        },
+        {
+          $facet: {
+            metadata: [{ $count: "totalCount" }],
+            data: [{ $skip: page * pageSize }, { $limit: pageSize }],
+          },
+        },
+      ]);
+    }
 
     return res.status(200).json({
       success: true,
@@ -34,6 +51,12 @@ exports.getLogs = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ success: false });
   }
+};
+
+exports.getLogsByBusId = async (req, res) => {
+  const { busId } = req.params;
+  const logs = await Logs.findOne({ busId: busId }).select({ __v: 0, _id: 0 });
+  res.status(200).json({ body: logs });
 };
 
 exports.postLog = async (req, res) => {

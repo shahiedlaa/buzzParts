@@ -5,8 +5,15 @@
       <span class="example-spacer"></span>
       <mat-form-field appearance="outline">
         <mat-label>Search</mat-label>
-        <input matInput placeholder="S123..." />
-        <mat-icon matSuffix>search</mat-icon>
+        <input
+          matInput
+          [(ngModel)]="search"
+          placeholder="S123..."
+          (keydown.enter)="onClickSearch()"
+        />
+        <mat-icon class="search-icon" (click)="onClickSearch()" matSuffix
+          >search</mat-icon
+        >
       </mat-form-field>
     </mat-card-header>
     <mat-card-content>
@@ -70,17 +77,13 @@
               style="text-align: center; padding: 1rem"
               colspan="999"
             >
-              <div class="spinner-div">
-                <mat-progress-spinner
-                  mode="indeterminate"
-                ></mat-progress-spinner>
-              </div>
+              <div class="spinner-div">No record found</div>
             </td>
           </tr>
         </table>
         <mat-paginator
           [pageSizeOptions]="[10]"
-          length="15"
+          [length]="length"
           [pageIndex]="index"
           (page)="pageChange($event)"
           showFirstLastButtons

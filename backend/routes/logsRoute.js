@@ -11,6 +11,8 @@ router.get("/edit-logs/:busId", logsController.getLogsByBusId);
 
 router.post("/", upload.none(), logsController.postLog);
 
+router.patch("/", upload.none(), logsController.updateLog);
+
 router.delete("/", logsController.deleteLog);
 
 module.exports = router;

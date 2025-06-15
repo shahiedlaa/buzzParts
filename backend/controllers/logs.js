@@ -1,3 +1,4 @@
+const { response } = require("express");
 const Logs = require("../models/logs");
 
 exports.getLogs = async (req, res) => {
@@ -77,6 +78,36 @@ exports.postLog = async (req, res) => {
       res.status(201).json({
         createdLog,
         message: "Log Created!",
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: err.message,
+      });
+    });
+};
+
+exports.updateLog = async (req, res) => {
+  const { name, date, busId, partName, partReturn, partIssue } = req.body;
+
+  const filter = { busId: busId };
+  const update = {
+    $set: {
+      name,
+      busId,
+      date,
+      partName,
+      partIssue,
+      partReturn,
+    },
+  };
+  const options = { new: true };
+
+  Logs.findOneAndUpdate(filter, update, options)
+    .then((response) => {
+      res.status(200).json({
+        updatedDocument: response,
+        message: "Log Updated!",
       });
     })
     .catch((err) => {

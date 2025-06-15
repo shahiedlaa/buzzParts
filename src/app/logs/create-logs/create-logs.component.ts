@@ -28,6 +28,7 @@ export class CreateLogsComponent {
   ) {}
 
   public createLogForm!: FormGroup;
+  public busID: any;
   public dateTime!: Date;
   public partName: string[] = ['OBC', 'DDU'];
   public editMode: boolean = false;
@@ -35,10 +36,13 @@ export class CreateLogsComponent {
 
   ngOnInit() {
     this.initForm();
-    this.route.paramMap.subscribe((response) => {
-      response.has('busId') ? (this.editMode = true) : null;
-      this.formData = this.route.snapshot.data['data'].body;
-      this.initForm(this.formData);
+    this.route.paramMap.subscribe((response: any) => {
+      if (response.has('busId')) {
+        this.editMode = true;
+        this.busID = response.params.busId;
+        this.formData = this.route.snapshot.data['data'].body;
+        this.initForm(this.formData);
+      }
     });
   }
 
@@ -49,9 +53,13 @@ export class CreateLogsComponent {
         Validators.required,
       ]),
       date: new FormControl(''),
-      busId: new FormControl(formData ? formData.busId : '', [
-        Validators.required,
-      ]),
+      busId: new FormControl(
+        {
+          value: formData ? formData.busId : '',
+          disabled: this.editMode ? true : null,
+        },
+        [Validators.required]
+      ),
       partName: new FormControl(formData ? formData.partName : '', [
         Validators.required,
       ]),
@@ -66,7 +74,14 @@ export class CreateLogsComponent {
 
   onSubmit() {
     if (!this.createLogForm.valid) return;
-    this.createLogForm.value['date'] = this.dateTime.toISOString();
-    this.logsService.addLogs({ ...this.createLogForm.value });
+    this.createLogForm.getRawValue().date = this.dateTime.toISOString();
+    const rawFormValue = this.createLogForm.getRawValue();
+    rawFormValue.date = this.dateTime.toISOString();
+
+    if (this.editMode) {
+      this.logsService.editLog({ ...rawFormValue });
+    } else {
+      this.logsService.addLogs({ ...this.createLogForm.value });
+    }
   }
 }

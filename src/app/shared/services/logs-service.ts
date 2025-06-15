@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, resource, signal } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
@@ -75,6 +76,30 @@ export class LogsService {
       },
     });
     return this.http.delete<any>(this.url, { params });
+  }
+
+  editLog(formValue: any) {
+    const logData = new FormData();
+
+    logData.append('name', formValue.name);
+    logData.append('date', formValue.date);
+    logData.append('busId', formValue.busId);
+    logData.append('partName', formValue.partName);
+    logData.append('partReturn', formValue.partReturn);
+    logData.append('partIssue', formValue.partIssue);
+
+    this.http.patch<any>(this.url, logData).subscribe({
+      next: (response) => {
+        this.openSnackbar(response.message, true);
+        setTimeout(() => window.location.reload(), 2000);
+      },
+      error: (err) => {
+        if (err.error.message.includes('duplicate')) {
+          this.errorMessage = 'Duplicate Bus ID';
+          this.openSnackbar();
+        }
+      },
+    });
   }
 
   openSnackbar(message?: string, creationLog: boolean = false) {
